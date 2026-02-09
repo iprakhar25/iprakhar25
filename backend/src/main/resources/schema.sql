@@ -3,7 +3,7 @@
 
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     username VARCHAR(100) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS user_roles (
 
 -- Visitors Table (for analytics)
 CREATE TABLE IF NOT EXISTS visitors (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     ip_address VARCHAR(45) UNIQUE NOT NULL,
     user_agent TEXT,
     visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS visitors (
 
 -- Projects Table
 CREATE TABLE IF NOT EXISTS projects (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     short_description VARCHAR(500),
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS project_tech_stack (
 
 -- Skills Table
 CREATE TABLE IF NOT EXISTS skills (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     category VARCHAR(50) NOT NULL,
     proficiency INT CHECK (proficiency >= 1 AND proficiency <= 5),
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS skills (
 
 -- Contact Messages Table
 CREATE TABLE IF NOT EXISTS contact_messages (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
     subject VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
@@ -68,37 +68,19 @@ CREATE TABLE IF NOT EXISTS contact_messages (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Insert Sample Skills
+-- Insert Sample Skills (Requested via UI redesign)
 INSERT INTO skills (name, category, proficiency, skill_order) VALUES
--- Backend
+-- Row 1: Languages
 ('Java', 'Backend', 5, 1),
-('Spring Boot', 'Backend', 5, 2),
-('Python', 'Backend', 4, 3),
-('Node.js', 'Backend', 4, 4),
-('PostgreSQL', 'Backend', 5, 5),
-('MongoDB', 'Backend', 4, 6),
+('Python', 'Backend', 5, 2),
+('C#', 'Backend', 4, 3),
+('JavaScript', 'Frontend', 5, 4),
 
--- Frontend
-('React', 'Frontend', 5, 1),
-('TypeScript', 'Frontend', 5, 2),
-('Tailwind CSS', 'Frontend', 5, 3),
-('Next.js', 'Frontend', 4, 4),
-('Vue.js', 'Frontend', 3, 5),
-('JavaScript', 'Frontend', 5, 6),
-
--- Infrastructure
-('Docker', 'Infra', 5, 1),
-('Kubernetes', 'Infra', 4, 2),
-('AWS', 'Infra', 4, 3),
-('CI/CD', 'Infra', 4, 4),
-('Linux', 'Infra', 5, 5),
-('Git', 'Infra', 5, 6),
-
--- AI & Data
-('Machine Learning', 'AI', 4, 1),
-('TensorFlow', 'AI', 3, 2),
-('Data Analysis', 'AI', 4, 3),
-('SQL', 'AI', 5, 4);
+-- Row 2: Platforms/Frameworks
+('Spring Boot', 'Backend', 5, 5),
+('.NET', 'Backend', 4, 6),
+('React', 'Frontend', 5, 7),
+('Azure', 'Infra', 4, 8);
 
 -- Insert Sample Projects
 INSERT INTO projects (title, short_description, description, github_url, live_url, project_order) VALUES

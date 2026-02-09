@@ -6,11 +6,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.portfolio</groupId>
-    <artifactId>portfolio-app</artifactId>
+    <artifactId>iprakhar25-portfolio</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Portfolio Application</name>
+    <name>iprakhar25 Portfolio</name>
     <description>High-end personal portfolio website with visitor tracking and dynamic content</description>
 
     <parent>

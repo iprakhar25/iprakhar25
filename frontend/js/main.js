@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = 'http://localhost:8082/api';
+const API_BASE_URL = 'http://localhost:8080/api';
 
 // State Management
 const state = {
@@ -9,18 +9,31 @@ const state = {
     isSignUpMode: false,
 };
 
+// ========================
+// Utility Functions
+// ========================
+
+function getYear() {
+    return new Date().getFullYear();
+}
+
 // Initialize app
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Set footer year
     const yearElement = document.getElementById('year');
     if (yearElement) {
-        yearElement.textContent = new Date().getFullYear();
+        yearElement.textContent = getYear();
     }
     initializeApp();
-    loadInitialData();
+    await loadInitialData();  // Wait for data to load before starting counter
     setupEventListeners();
     restoreAuthState();
     startTimeCounter();
+
+    // Polling for real-time updates (Visitor count and Music)
+    setInterval(async () => {
+        await loadVisitorCount();
+    }, 5000); // Every 5 seconds
 });
 
 // ========================
@@ -40,7 +53,6 @@ function initializeApp() {
             updateUIForLoggedIn();
         }
     }
-    document.getElementById('year').textContent = new Date().getFullYear();
 }
 
 function setupEventListeners() {
@@ -90,6 +102,11 @@ async function loadInitialData() {
 
         // Load time on earth
         await loadTimeOnEarth();
+
+
+
+        // Load LeetCode activity
+        await loadLeetCodeActivity();
     } catch (error) {
         console.error('Error loading initial data:', error);
     }
@@ -142,25 +159,15 @@ async function loadSkills() {
         const response = await fetch(`${API_BASE_URL}/skills`);
         const skills = await response.json();
 
-        const categories = {
-            'Backend': 'backendSkills',
-            'Frontend': 'frontendSkills',
-            'Infra': 'infraSkills',
-            'AI': 'aiSkills'
-        };
+        const grid = document.getElementById('skillsGrid');
+        if (!grid) return;
 
-        // Clear all
-        Object.values(categories).forEach(id => {
-            document.getElementById(id).innerHTML = '';
-        });
+        grid.innerHTML = '';
 
-        // Group by category
+        // Render all skills into the single grid
         skills.forEach(skill => {
-            const categoryId = categories[skill.category];
-            if (categoryId) {
-                const badge = createSkillBadge(skill);
-                document.getElementById(categoryId).appendChild(badge);
-            }
+            const pill = createSkillPill(skill);
+            grid.appendChild(pill);
         });
     } catch (error) {
         console.error('Error loading skills:', error);
@@ -175,6 +182,115 @@ async function loadTimeOnEarth() {
         window.timeData = data;
     } catch (error) {
         console.error('Error loading time on earth:', error);
+    }
+}
+
+
+
+async function loadLeetCodeActivity() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/leetcode/stats?username=iprakhar25`);
+        if (!response.ok) throw new Error('Failed to fetch LeetCode stats');
+        const stats = await response.json();
+
+        // Update counts
+        document.getElementById('easyCount').textContent = stats.easySolved;
+        document.getElementById('mediumCount').textContent = stats.mediumSolved;
+        document.getElementById('hardCount').textContent = stats.hardSolved;
+
+        // Render Grid
+        renderContributionGrid(stats.submissionCalendar || {});
+
+    } catch (error) {
+        console.error('Error loading LeetCode activity:', error);
+    }
+}
+
+function renderContributionGrid(calendar) {
+    const grid = document.getElementById('contributionGrid');
+    const monthLabelsRow = document.getElementById('monthLabels');
+    if (!grid || !monthLabelsRow) return;
+
+    grid.innerHTML = '';
+    monthLabelsRow.innerHTML = '';
+
+    const today = new Date();
+    const startDate = new Date();
+    // Exactly 365 days total (including today)
+    startDate.setDate(today.getDate() - 364);
+
+    let current = new Date(startDate);
+    let totalSubmissions = 0;
+    let currentMonth = -1;
+    let weekCol = null;
+
+    // 365 days = 52 full weeks + 1 day = 53 columns total
+    const totalDays = 365;
+    const numCols = Math.ceil(totalDays / 7);
+
+    for (let i = 0; i < totalDays; i++) {
+        // Start a new column every 7 days
+        if (i % 7 === 0) {
+            weekCol = document.createElement('div');
+            weekCol.className = 'week-column flex-1 flex flex-col gap-[4px] min-w-[8px]';
+            grid.appendChild(weekCol);
+        }
+
+        // Check for month transition to add label
+        const monthNum = current.getMonth();
+        if (monthNum !== currentMonth) {
+            const colIndex = Math.floor(i / 7);
+            const labelPos = (colIndex / numCols) * 100;
+
+            // Only add label if it's the first or significantly distant from the previous label (~8% of total width)
+            if (currentMonth === -1 || (labelPos - window.lastLabelPos > 8)) {
+                currentMonth = monthNum;
+                window.lastLabelPos = labelPos;
+
+                const label = document.createElement('div');
+                label.className = 'absolute whitespace-nowrap text-dark-500 hover:text-dark-300 transition-colors cursor-default';
+                label.style.left = `${labelPos}%`;
+                label.textContent = current.toLocaleString('default', { month: 'short' });
+                monthLabelsRow.appendChild(label);
+            }
+        }
+
+        const dayCell = document.createElement('div');
+        dayCell.className = 'day-cell w-full aspect-square bg-[#161b22] rounded-[2px] border border-white/5 transition-all duration-200 hover:scale-125 hover:z-10 cursor-pointer';
+
+        const dateStr = current.toISOString().split('T')[0];
+        let count = 0;
+        for (const [ts, submissions] of Object.entries(calendar)) {
+            const tsDate = new Date(parseInt(ts) * 1000).toISOString().split('T')[0];
+            if (tsDate === dateStr) {
+                count = submissions;
+                break;
+            }
+        }
+
+        totalSubmissions += count;
+
+        if (count > 0 && count <= 2) dayCell.style.backgroundColor = '#2d333b';
+        else if (count > 2 && count <= 5) dayCell.style.backgroundColor = '#444c56';
+        else if (count > 5 && count <= 10) dayCell.style.backgroundColor = '#768390';
+        else if (count > 10) dayCell.style.backgroundColor = '#adbac7';
+
+        dayCell.title = `${current.toDateString()}: ${count} submissions`;
+        weekCol.appendChild(dayCell);
+
+        // Move to next day
+        current.setDate(current.getDate() + 1);
+    }
+
+    document.getElementById('totalSubmissions').textContent = `${totalSubmissions} submissions in the last year`;
+
+    // Scroll to the end (Latest activity) automatically
+    const graphContainer = document.getElementById('leetcodeGraph');
+    if (graphContainer) {
+        // We use requestAnimationFrame to ensure the DOM has updated and calculated sizes
+        requestAnimationFrame(() => {
+            graphContainer.scrollLeft = graphContainer.scrollWidth;
+        });
     }
 }
 
@@ -409,21 +525,37 @@ function createProjectCard(project) {
     return card;
 }
 
-function createSkillBadge(skill) {
-    const badge = document.createElement('div');
-    badge.className = 'skill-badge px-3 py-2 rounded text-sm';
-    badge.innerHTML = `
-        <div class="flex justify-between items-center">
-            <span>${skill.name}</span>
-            <span class="text-dark-400 text-xs">${'★'.repeat(skill.proficiency || 3)}</span>
+function createSkillPill(skill) {
+    const pill = document.createElement('div');
+    pill.className = 'flex items-center gap-3 px-6 py-4 rounded-2xl bg-dark-900/30 border border-dark-800/50 hover:bg-dark-800/40 hover:border-dark-700 hover:scale-110 transition-all duration-300 group cursor-default select-none animate-fade-in';
+
+    // Icon mapping using Skill Icons API for high reliability and consistent style
+    const iconMap = {
+        'java': 'java',
+        'python': 'py',
+        'c#': 'cs',
+        'javascript': 'js',
+        'spring boot': 'spring',
+        '.net': 'dotnet',
+        'react': 'react',
+        'azure': 'azure'
+    };
+
+    const name = (skill.name || '').trim().toLowerCase();
+    const slug = iconMap[name] || 'codesignal';
+
+    pill.innerHTML = `
+        <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-dark-950/50 border border-dark-800 p-1.5 transition-transform duration-300">
+            <img src="https://skillicons.dev/icons?i=${slug}" 
+                 alt="${skill.name}" 
+                 class="w-full h-full object-contain">
         </div>
+        <span class="text-lg font-display font-bold text-dark-50 tracking-wide">${skill.name}</span>
     `;
-    return badge;
+
+    return pill;
 }
 
-// ========================
-// Utility Functions
-// ========================
 
 function formatNumber(num) {
     return new Intl.NumberFormat('en-US').format(num);

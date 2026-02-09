@@ -14,7 +14,7 @@ import java.time.ZoneId;
 public class TimeService {
 
     // Set your birth date here (format: YYYY-MM-DD)
-    @Value("${portfolio.birth-date:1995-07-15}")
+    @Value("${portfolio.birth-date:2002-03-25}")
     private String birthDateStr;
 
     public TimeOnEarthResponse getTimeOnEarth() {

@@ -3,12 +3,12 @@
 
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     username VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- User Roles Table
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS user_roles (
 
 -- Visitors Table (for analytics)
 CREATE TABLE IF NOT EXISTS visitors (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     ip_address VARCHAR(45) UNIQUE NOT NULL,
     user_agent TEXT,
     visited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -29,14 +29,14 @@ CREATE TABLE IF NOT EXISTS visitors (
 
 -- Projects Table
 CREATE TABLE IF NOT EXISTS projects (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     short_description VARCHAR(500),
     github_url VARCHAR(500),
     live_url VARCHAR(500),
     image_url TEXT,
-    `order` INT DEFAULT 0,
+    project_order INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -50,16 +50,16 @@ CREATE TABLE IF NOT EXISTS project_tech_stack (
 
 -- Skills Table
 CREATE TABLE IF NOT EXISTS skills (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     category VARCHAR(50) NOT NULL,
     proficiency INT CHECK (proficiency >= 1 AND proficiency <= 5),
-    `order` INT DEFAULT 0
+    skill_order INT DEFAULT 0
 );
 
 -- Contact Messages Table
 CREATE TABLE IF NOT EXISTS contact_messages (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
     subject VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 );
 
 -- Insert Sample Skills
-INSERT INTO skills (name, category, proficiency, `order`) VALUES
+INSERT INTO skills (name, category, proficiency, skill_order) VALUES
 -- Backend
 ('Java', 'Backend', 5, 1),
 ('Spring Boot', 'Backend', 5, 2),
@@ -101,7 +101,7 @@ INSERT INTO skills (name, category, proficiency, `order`) VALUES
 ('SQL', 'AI', 5, 4);
 
 -- Insert Sample Projects
-INSERT INTO projects (title, short_description, description, github_url, live_url, `order`) VALUES
+INSERT INTO projects (title, short_description, description, github_url, live_url, project_order) VALUES
 (
     'Nexus',
     'Multi-client chat application built with Java',
