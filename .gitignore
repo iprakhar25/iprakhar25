@@ -1,0 +1,77 @@
+# Git Ignore for Portfolio Project
+
+# Build directories
+target/
+build/
+dist/
+*.jar
+*.war
+*.ear
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+.eclipse
+
+# Maven
+.m2/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.asc
+
+# Node (if used for build tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+*.h2.db
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+*.exe
+*.dll
+*.so
+
+# Gradle (if migrated)
+.gradle/
+gradle/
+
+# Compiled files
+*.class
+*.o
+*.so
+*.dylib
+
+# Test coverage
+coverage/
+.coverage
+htmlcov/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Local development
+local.properties
+.env.development.local
+
+# Secrets
+secrets/
+*.key
+*.pem
