@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = 'https://iprakhar25.onrender.com';
+const API_BASE_URL = 'https://iprakhar25.onrender.com/api';
 
 // State Management
 const state = {
