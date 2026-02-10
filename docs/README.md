@@ -49,6 +49,6 @@
 
 ---
 
-Regards,
-Prakhar Bajpai
-23 | Software Engineer | probably travelling
+Regards,  
+Prakhar Bajpai  
+23 | Software Engineer | probably travelling  
