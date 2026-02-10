@@ -99,10 +99,12 @@
         }
 
         .text-gradient {
-            background: linear-gradient(135deg, #f3f3f3 0%, #d4d4d4 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: inline-block;
+            font-weight: 600;
         }
 
         .border-subtle {
@@ -217,27 +219,47 @@
                 </div>
 
                 <!-- Social Links in Hero -->
-                <div class="inline-flex items-center gap-7 bg-dark-900/30 backdrop-blur-md border border-dark-800 rounded-2xl p-5 animate-fade-in"
-                    style="animation-delay: 0.2s;">
-                    <a href="https://github.com/iprakhar25" target="_blank" rel="noopener"
-                        class="hover:scale-110 transition duration-300 ease-out">
-                        <img src="assets/socials/github.png" alt="GitHub" class="h-8 w-8 rounded-md saturate-110">
+                <div class="flex items-center gap-6 mt-10">
+                    <!-- GitHub -->
+                    <a href="https://github.com/iprakhar25" target="_blank" class="group relative contact-link">
+                        <div
+                            class="absolute -inset-3 bg-white/5 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                        <img src="https://skillicons.dev/icons?i=github&theme=dark" alt="GitHub"
+                            class="h-9 w-9 relative transform group-hover:-translate-y-1.5 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
                     </a>
-                    <a href="https://www.linkedin.com/in/iprakhar25/" target="_blank" rel="noopener"
-                        class="hover:scale-110 transition duration-300 ease-out">
-                        <img src="assets/socials/linkedin.png" alt="LinkedIn" class="h-8 w-8 rounded-md saturate-110">
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/iprakhar25/" target="_blank"
+                        class="group relative contact-link">
+                        <div
+                            class="absolute -inset-3 bg-[#0077B5]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                        <img src="https://skillicons.dev/icons?i=linkedin" alt="LinkedIn"
+                            class="h-9 w-9 relative transform group-hover:-translate-y-1.5 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(0,119,181,0.4)]">
                     </a>
-                    <a href="https://x.com/2503prakhar" target="_blank" rel="noopener"
-                        class="hover:scale-110 transition duration-300 ease-out">
-                        <img src="assets/socials/twitter.png" alt="Twitter" class="h-8 w-8 rounded-md saturate-110">
+                    <!-- X (Twitter) -->
+                    <a href="https://x.com/2503prakhar" target="_blank" class="group relative contact-link">
+                        <div
+                            class="absolute -inset-3 bg-white/5 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                        <img src="https://skillicons.dev/icons?i=twitter" alt="X"
+                            class="h-9 w-9 relative transform group-hover:-translate-y-1.5 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
                     </a>
-                    <a href="https://www.instagram.com/iprakhar25/" target="_blank" rel="noopener"
-                        class="hover:scale-110 transition duration-300 ease-out">
-                        <img src="assets/socials/instagram.png" alt="Instagram" class="h-8 w-8 rounded-md saturate-110">
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/iprakhar25/" target="_blank" class="group relative contact-link">
+                        <div
+                            class="absolute -inset-3 bg-[#E4405F]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                        <img src="https://skillicons.dev/icons?i=instagram" alt="Instagram"
+                            class="h-9 w-9 relative transform group-hover:-translate-y-1.5 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(228,64,95,0.4)]">
                     </a>
-                    <a href="https://leetcode.com/u/iprakhar25/" target="_blank" rel="noopener"
-                        class="hover:scale-110 transition duration-300 ease-out">
-                        <img src="assets/socials/leetcode.png" alt="LeetCode" class="h-8 w-8 rounded-md saturate-110">
+                    <!-- LeetCode -->
+                    <a href="https://leetcode.com/u/iprakhar25/" target="_blank" class="group relative contact-link">
+                        <div
+                            class="absolute -inset-3 bg-[#FFA116]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        </div>
+                        <img src="assets/socials/leetcode.png" alt="LeetCode"
+                            class="h-9 w-9 relative transform group-hover:-translate-y-1.5 transition-all duration-500 group-hover:drop-shadow-[0_0_15px_rgba(255,161,22,0.4)]">
                     </a>
                 </div>
             </div>
@@ -298,16 +320,17 @@
         <div class="max-w-6xl mx-auto">
             <!-- Activity Container -->
             <div
-                class="bg-dark-900/40 border border-dark-800 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-xl w-full relative overflow-hidden shadow-2xl">
+                class="bg-dark-900/40 border border-dark-800 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-xl w-full relative overflow-hidden shadow-2xl group">
                 <div
                     class="absolute -inset-10 leetcode-glow opacity-60 group-hover:opacity-100 transition-opacity duration-700">
                 </div>
                 <!-- Header: Title, Stats, and Profile Button -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
                     <div class="flex items-center gap-4">
-                        <div class="p-2 bg-dark-800/80 rounded-2xl border border-dark-700">
+                        <div
+                            class="p-2 bg-dark-800/80 rounded-2xl border border-dark-700 group-hover:border-[#FFA116]/30 transition-colors duration-500">
                             <img src="assets/socials/leetcode.png" alt="LeetCode"
-                                class="h-8 w-8 rounded-sm brightness-125 saturate-110">
+                                class="h-8 w-8 relative brightness-125 group-hover:drop-shadow-[0_0_10px_rgba(255,161,22,0.4)] transition-all duration-500">
                         </div>
                         <div>
                             <h2 class="text-2xl font-display font-bold uppercase tracking-wider text-dark-50">Real-Time

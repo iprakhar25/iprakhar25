@@ -216,12 +216,12 @@ function renderContributionGrid(calendar) {
 
     const today = new Date();
     const startDate = new Date();
-    // Exactly 365 days total (including today)
     startDate.setDate(today.getDate() - 364);
 
     let current = new Date(startDate);
     let totalSubmissions = 0;
     let currentMonth = -1;
+    window.lastLabelPos = -100; // Initialize for first label
     let weekCol = null;
 
     // 365 days = 52 full weeks + 1 day = 53 columns total
@@ -527,30 +527,78 @@ function createProjectCard(project) {
 
 function createSkillPill(skill) {
     const pill = document.createElement('div');
-    pill.className = 'flex items-center gap-3 px-6 py-4 rounded-2xl bg-dark-900/30 border border-dark-800/50 hover:bg-dark-800/40 hover:border-dark-700 hover:scale-110 transition-all duration-300 group cursor-default select-none animate-fade-in';
 
-    // Icon mapping using Skill Icons API for high reliability and consistent style
+    // Brand Color Mapping
+    const brandColors = {
+        'java': '#ED8B00',
+        'python': '#3776AB',
+        'c#': '#239120',
+        'javascript': '#F7DF1E',
+        'spring boot': '#6DB33F',
+        '.net': '#512BD4',
+        'react': '#61DAFB',
+        'azure': '#0078D4',
+        'typescript': '#3178C6',
+        'node.js': '#339933',
+        'postgresql': '#4169E1',
+        'mongodb': '#47A248',
+        'docker': '#2496ED',
+        'kubernetes': '#326CE5',
+        'aws': '#FF9900',
+        'linux': '#FCC624',
+        'git': '#F05032',
+        'machine learning': '#A855F7',
+        'tensorflow': '#FF6F00',
+        'data analysis': '#3B82F6',
+        'sql': '#336791'
+    };
+
+    const name = (skill.name || '').trim().toLowerCase();
+    const brandColor = brandColors[name] || '#adbac7';
+
+    // Icon Mapping for skillicons.dev
     const iconMap = {
         'java': 'java',
-        'python': 'py',
+        'python': 'python',
         'c#': 'cs',
         'javascript': 'js',
         'spring boot': 'spring',
         '.net': 'dotnet',
         'react': 'react',
-        'azure': 'azure'
+        'azure': 'azure',
+        'typescript': 'ts',
+        'node.js': 'nodejs',
+        'postgresql': 'postgres',
+        'mongodb': 'mongodb',
+        'docker': 'docker',
+        'kubernetes': 'kubernetes',
+        'aws': 'aws',
+        'linux': 'linux',
+        'git': 'git',
+        'machine learning': 'pytorch',
+        'tensorflow': 'tensorflow',
+        'data analysis': 'scipy',
+        'sql': 'mysql'
     };
 
-    const name = (skill.name || '').trim().toLowerCase();
     const slug = iconMap[name] || 'codesignal';
 
+    pill.className = `skill-island group relative flex items-center gap-4 bg-dark-200/50 backdrop-blur-md border border-dark-50/10 px-6 py-3.5 rounded-2xl hover:bg-dark-100/50 transition-all duration-500 hover:-translate-y-1.5 cursor-default overflow-hidden`;
+
+    // Apply brand color as a CSS variable for the glow and border
+    pill.style.setProperty('--brand-glow', brandColor);
+
     pill.innerHTML = `
-        <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-dark-950/50 border border-dark-800 p-1.5 transition-transform duration-300">
+        <!-- Dynamic Brand Glow -->
+        <div class="absolute inset-0 opacity-0 group-hover:opacity-10 bg-[radial-gradient(circle_at_center,var(--brand-glow)_0%,transparent_70%)] transition-opacity duration-500"></div>
+        <div class="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[var(--brand-glow)] to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+        
+        <div class="w-9 h-9 flex items-center justify-center rounded-xl bg-dark-950/80 border border-dark-800 shadow-inner transform group-hover:scale-110 group-hover:border-[var(--brand-glow)]/30 transition-all duration-500 z-10">
             <img src="https://skillicons.dev/icons?i=${slug}" 
                  alt="${skill.name}" 
-                 class="w-full h-full object-contain">
+                 class="w-6 h-6 object-contain filter group-hover:drop-shadow-[0_0_8px_var(--brand-glow)] transition-all duration-500">
         </div>
-        <span class="text-lg font-display font-bold text-dark-50 tracking-wide">${skill.name}</span>
+        <span class="text-lg font-display font-medium text-dark-100 tracking-wide group-hover:text-white transition-colors duration-300 z-10">${skill.name}</span>
     `;
 
     return pill;
