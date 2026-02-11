@@ -23,11 +23,20 @@ public class VisitorService {
     }
 
     public void incrementVisitorCount(String ipAddress, String userAgent) {
-        Visitor visitor = Visitor.builder()
-                .ipAddress(ipAddress)
-                .userAgent(userAgent)
-                .build();
-        visitorRepository.save(visitor);
+        // Provide fallback values to prevent null pointer exceptions
+        String safeIpAddress = (ipAddress != null && !ipAddress.isEmpty()) ? ipAddress : "unknown";
+        String safeUserAgent = (userAgent != null && !userAgent.isEmpty()) ? userAgent : "unknown";
+        
+        try {
+            Visitor visitor = Visitor.builder()
+                    .ipAddress(safeIpAddress)
+                    .userAgent(safeUserAgent)
+                    .build();
+            visitorRepository.save(visitor);
+        } catch (Exception e) {
+            // Log the error but don't fail the request
+            System.err.println("Failed to save visitor: " + e.getMessage());
+        }
     }
 
     @Scheduled(cron = "0 0 0 * * ?")

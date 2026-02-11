@@ -25,15 +25,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         yearElement.textContent = getYear();
     }
     initializeApp();
-    await loadInitialData();  // Wait for data to load before starting counter
+
+    // Start server ping immediately
+    startServerPing();
+
+    try {
+        await loadInitialData();
+    } catch (error) {
+        console.error('Initialization error:', error);
+    } finally {
+        // Hide preloader with a slight delay for smooth transition
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.classList.add('fade-out');
+            }
+        }, 800);
+    }
+
     setupEventListeners();
     restoreAuthState();
     startTimeCounter();
 
-    // Polling for real-time updates (Visitor count and Music)
+    // Polling for real-time updates
     setInterval(async () => {
         await loadVisitorCount();
-    }, 5000); // Every 5 seconds
+    }, 30000); // 30 seconds for better performance
 });
 
 // ========================
@@ -109,6 +126,25 @@ async function loadInitialData() {
         await loadLeetCodeActivity();
     } catch (error) {
         console.error('Error loading initial data:', error);
+        throw error; // Re-throw for finally block
+    }
+}
+
+async function startServerPing() {
+    // Ping immediately
+    pingServer();
+
+    // Ping every 5 minutes (300,000 ms)
+    setInterval(pingServer, 300000);
+}
+
+async function pingServer() {
+    try {
+        // Ping production backend to keep Render service awake
+        await fetch('https://iprakhar25.onrender.com/', { mode: 'no-cors', cache: 'no-cache' });
+        console.log('Server ping successful');
+    } catch (error) {
+        console.error('Server ping failed:', error);
     }
 }
 

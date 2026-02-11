@@ -169,10 +169,94 @@
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
         }
+
+        /* Premium Preloader Styles */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+        }
+
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+            position: relative;
+            animation: pulse-slow 3s infinite ease-in-out;
+        }
+
+        .loader-bar-container {
+            width: 200px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-bar {
+            position: absolute;
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, transparent, #adbac7, transparent);
+            animation: loading-bar 1.5s infinite ease-in-out;
+            box-shadow: 0 0 15px rgba(173, 186, 199, 0.4);
+        }
+
+        @keyframes loading-bar {
+            0% {
+                left: -40%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
 <body class="font-sans">
+    <!-- Premium Preloader -->
+    <div id="preloader">
+        <div class="loader-logo">
+            <img src="assets/socials/bLogo.png" alt="Branding"
+                class="w-full h-full object-contain filter brightness-125">
+            <div class="absolute inset-0 bg-white/5 rounded-full blur-2xl"></div>
+        </div>
+        <div class="loader-bar-container">
+            <div class="loader-bar"></div>
+        </div>
+        <p class="mt-6 text-[10px] uppercase tracking-[0.4em] text-dark-500 font-bold opacity-0 animate-fade-in"
+            style="animation-delay: 0.5s;">
+            Initializing Portfolio
+        </p>
+    </div>
+
     <!-- Navigation -->
     <nav class="fixed w-full top-0 z-50 bg-black/80 backdrop-blur-md border-b border-subtle">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
