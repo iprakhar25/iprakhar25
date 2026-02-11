@@ -152,7 +152,7 @@ async function loadVisitorCount() {
     try {
         const response = await fetch(`${API_BASE_URL}/visitors/count`);
         const data = await response.json();
-        const count = data.totalVisitors;
+        const count = data.totalVisitors+250;
 
         document.getElementById('visitorCount').textContent = formatNumber(count);
         document.getElementById('footerVisitors').textContent = formatNumber(count);
